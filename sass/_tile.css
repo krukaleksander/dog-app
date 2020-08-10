@@ -1,0 +1,24 @@
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.tiles__tile {
+  flex: 0 1 33.3%;
+  padding: 0 15px;
+  margin-bottom: 7.5px;
+}
+
+.tiles__tile-content {
+  cursor: pointer;
+  background: teal;
+  padding: 15px;
+  color: white;
+  text-align: center;
+  transition: .5s;
+}
+
+.tiles__tile-content:hover {
+  background: #004d4d;
+}

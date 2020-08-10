@@ -2,6 +2,7 @@ class Doggo {
     constructor() {
         this.apiUrl = 'https://dog.ceo/api';
         this.imgElement = document.querySelector('.featured-dog img');
+        this.backgroundElement = document.querySelector('.featured-dog__background');
         this.init();
     }
 
@@ -23,11 +24,24 @@ class Doggo {
             .then(resp => resp.json())
             .then(data => data.message);
     };
+    showAllBreeds() {
+        this.listAllBreeds()
+            .then(breeds => {
+                for (const breed in breeds) {
+                    // stop here 9.40
+                    console.log(breed);
+                }
+            })
+    }
     init() {
         this.getRandomImage()
-            .then(src => this.imgElement.setAttribute('src', src));
+            .then(src => {
+                this.imgElement.setAttribute('src', src);
+                this.backgroundElement.style.background = `url("${src}")`;
+            });
         this.listAllBreeds()
             .then(breeds => console.log(breeds));
+        this.showAllBreeds();
     }
 
 }
