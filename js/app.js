@@ -3,6 +3,7 @@ class Doggo {
         this.apiUrl = 'https://dog.ceo/api';
         this.imgElement = document.querySelector('.featured-dog img');
         this.backgroundElement = document.querySelector('.featured-dog__background');
+        this.tilesElement = document.querySelector('.tiles');
         this.init();
     }
 
@@ -24,15 +25,47 @@ class Doggo {
             .then(resp => resp.json())
             .then(data => data.message);
     };
+    addBreed(breed, subBreed) {
+        let name, type;
+        if (typeof subBreed === 'undefined') {
+            name = breed;
+            type = breed;
+        } else {
+            name = `${breed} ${subBreed}`;
+            type = `${breed}/${subBreed}`;
+        }
+
+        const tile = document.createElement('div');
+        tile.classList.add('tiles__tile');
+        const tileContent = document.createElement('div');
+        tileContent.classList.add('tiles__tile-content');
+
+        tileContent.innerText = name;
+        tileContent.addEventListener('click', () => {
+            this.getRandomImageByBreed(type)
+                .then(src => {
+                    this.imgElement.setAttribute('src', src);
+                    this.backgroundElement.style.background = `url("${src}")`;
+                });
+        });
+        tile.appendChild(tileContent);
+        this.tilesElement.appendChild(tile);
+    };
+
     showAllBreeds() {
         this.listAllBreeds()
             .then(breeds => {
                 for (const breed in breeds) {
-                    // stop here 9.40
-                    console.log(breed);
+                    if (breeds[breed].length === 0) {
+                        this.addBreed(breed);
+                    } else {
+                        for (const subBreed of breeds[breed]) {
+                            this.addBreed(breed, subBreed);
+                        }
+                    }
                 }
             })
-    }
+    };
     init() {
         this.getRandomImage()
             .then(src => {
