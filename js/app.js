@@ -31,6 +31,11 @@ class Doggo {
             .then(resp => resp.json())
             .then(data => data.message);
     };
+    showImageWhenReady(src) {
+        this.imgElement.setAttribute('src', src);
+        this.backgroundElement.style.background = `url("${src}")`;
+        this.hideLoading();
+    };
     addBreed(breed, subBreed) {
         let name, type;
         if (typeof subBreed === 'undefined') {
@@ -48,13 +53,10 @@ class Doggo {
 
         tileContent.innerText = name;
         tileContent.addEventListener('click', () => {
+            window.scrollTo(0, 0);
             this.showLoading();
             this.getRandomImageByBreed(type)
-                .then(src => {
-                    this.imgElement.setAttribute('src', src);
-                    this.backgroundElement.style.background = `url("${src}")`;
-                    this.hideLoading();
-                });
+                .then(src => this.showImageWhenReady(src));
         });
         tile.appendChild(tileContent);
         this.tilesElement.appendChild(tile);
@@ -77,11 +79,7 @@ class Doggo {
     init() {
         this.showLoading();
         this.getRandomImage()
-            .then(src => {
-                this.imgElement.setAttribute('src', src);
-                this.backgroundElement.style.background = `url("${src}")`;
-                this.hideLoading();
-            });
+            .then(src => this.showImageWhenReady(src));
         this.listAllBreeds()
             .then(breeds => console.log(breeds));
         this.showAllBreeds();
